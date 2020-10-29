@@ -6,24 +6,21 @@ from keras.layers import Input, InputLayer, Conv2D, Activation, LeakyReLU, Conca
 from layers import BilinearUpSampling2D
 from loss import depth_loss_function
 
-def create_model(existing='', is_twohundred=False, is_halffeatures=True, is121 = False):
+def create_model(existing='', is_twohundred=False, is_halffeatures=True):
         
     if len(existing) == 0:
         print('Loading base model (DenseNet)..')
 
         # Encoder Layers
         if is_twohundred:
-            base_model = applications.DenseNet201(input_shape=(None, None, 3), include_top=False, weights = 'imagenet') #whether to include fc at the top
-        if is121:
-            base_model = applications.DenseNet121(input_shape=(None, None, 3), include_top=False, weights='imagenet')
+            base_model = applications.DenseNet201(input_shape=(None, None, 3), include_top=False)
         else:
-            base_model = applications.DenseNet169(input_shape=(None, None, 3), include_top=False, weights = 'imagenet')
+            base_model = applications.DenseNet169(input_shape=(None, None, 3), include_top=False)
 
         print('Base model loaded.')
 
         # Starting point for decoder
         base_model_output_shape = base_model.layers[-1].output.shape
-        print(" Output shape is: ", base_model_output_shape)
 
         # Layer freezing?
         for layer in base_model.layers: layer.trainable = True

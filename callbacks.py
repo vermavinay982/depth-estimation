@@ -80,7 +80,7 @@ def get_nyu_callbacks(model, basemodel, train_generator, test_generator, test_se
     callbacks.append( lr_schedule ) # reduce learning rate when stuck
 
     # Callback: save checkpoints
-    callbacks.append(keras.callbacks.ModelCheckpoint(runPath + '/weights.{epoch:02d}-{val_loss:.2f}.h5', monitor='val_loss',
-        verbose=1, save_best_only=False, save_weights_only=False, mode='min', period=1))
+    callbacks.append(keras.callbacks.ModelCheckpoint(runPath + '/weights.{epoch:02d}-{val_loss:.2f}.hdf5', monitor='val_loss', 
+        verbose=1, save_best_only=False, save_weights_only=False, mode='min', period=5))
 
     return callbacks

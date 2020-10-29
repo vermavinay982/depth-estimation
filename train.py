@@ -5,7 +5,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '5'
 from loss import depth_loss_function
 from utils import predict, save_images, load_test_data
 from model import create_model
-from model_resnet import create_model_resnet
 from data import get_nyu_train_test_data, get_unreal_train_test_data
 from callbacks import get_nyu_callbacks
 
@@ -26,8 +25,6 @@ parser.add_argument('--maxdepth', type=float, default=1000.0, help='Maximum of i
 parser.add_argument('--name', type=str, default='densedepth_nyu', help='A name to attach to the training session')
 parser.add_argument('--checkpoint', type=str, default='', help='Start training from an existing model.')
 parser.add_argument('--full', dest='full', action='store_true', help='Full training with metrics, checkpoints, and image samples.')
-parser.add_argument('--dnetVersion', type = str, default= 'medium' , help='Choice of densenet from small, medium or large.')
-parser.add_argument('--resnet50', dest='resnet50', action='store_true', help='Train a Resnet 50 model.')
 
 args = parser.parse_args()
 
@@ -39,15 +36,7 @@ else:
     print('Will use ' + str(args.gpus) + ' GPUs.')
 
 # Create the model
-if args.resnet50:  # if want a resnet model
-    model = create_model_resnet(existing=args.checkpoint)
-else: # choose densetnet model
-    if args.dnetVersion == 'small':
-        model = create_model(existing=args.checkpoint, is121 = True)
-    if args.dnetVersion == 'medium':
-        model = create_model( existing=args.checkpoint )
-    if args.dnetVersion == 'large':
-        model = create_model( existing=args.checkpoint, is_twohundred=True )
+model = create_model( existing=args.checkpoint )
 
 # Data loaders
 if args.data == 'nyu': train_generator, test_generator = get_nyu_train_test_data( args.bs )
